@@ -15,8 +15,6 @@ spec:
       labels:
         app: sample
     spec:
-      serviceAccountName: sample-service-account
-      # Pod-level security context
       securityContext:
         runAsUser: 2000
         fsGroup: 2000
@@ -35,13 +33,3 @@ spec:
             runAsNonRoot: true
             runAsUser: 2000
             allowPrivilegeEscalation: false
-          resources:
-            limits:
-              cpu: "100m"
-              memory: "128Mi"
-            requests:
-              cpu: "50m"
-              memory: "96Mi"
-      nodeSelector: {}
-      tolerations: []
-      affinity: {}
