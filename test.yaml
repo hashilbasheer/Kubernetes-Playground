@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sample-deployment
+  namespace: sample
+  labels:
+    app: sample
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sample
+  template:
+    metadata:
+      labels:
+        app: sample
+    spec:
+      serviceAccountName: sample-service-account
+      # Pod-level security context
+      securityContext:
+        runAsUser: 2000
+        fsGroup: 2000
+      containers:
+        - name: sample-container
+          image: mikrose/sample:1.0.1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+          # Container-level security context
+          securityContext:
+            capabilities:
+              drop:
+              - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 2000
+            allowPrivilegeEscalation: false
+          resources:
+            limits:
+              cpu: "100m"
+              memory: "128Mi"
+            requests:
+              cpu: "50m"
+              memory: "96Mi"
+      nodeSelector: {}
+      tolerations: []
+      affinity: {}
